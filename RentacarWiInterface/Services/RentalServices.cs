@@ -8,12 +8,13 @@ namespace RentacarWiInterface.Services
         public double PricePerHour { get; private set; }
         public double PricePerDay { get; private set; }
 
-        private BrasilTaxService _brasilTaxService = new BrasilTaxService();
+        private ITaxService _taxService;
 
-        public RentalServices(double pricePerHour, double pricePerDay)
+        public RentalServices(double pricePerHour, double pricePerDay, ITaxService taxservice)
         {
             PricePerHour = pricePerHour;
             PricePerDay = pricePerDay;
+            _taxService = taxservice;
         }
 
         public void ProcessInvoice(CarRental carRental)
@@ -31,7 +32,7 @@ namespace RentacarWiInterface.Services
                 basicPayment = PricePerDay * Math.Ceiling(duracao.TotalDays);
             }
 
-            double tax = _brasilTaxService.Tax(basicPayment);
+            double tax = _taxService.Tax(basicPayment);
             carRental.Invoice = new Invoice(basicPayment, tax);
         }
     }

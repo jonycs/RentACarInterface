@@ -2,6 +2,7 @@
 using RentacarWiInterface.Services;
 using System;
 using System.Globalization;
+using System.Net.Http.Headers;
 
 namespace RentacarWiInterface
 {
@@ -14,7 +15,7 @@ namespace RentacarWiInterface
             string modelo = Console.ReadLine();
             Console.Write("Data de retirada: ");
             DateTime retirada = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
-            Console.Write("Data de retirada: ");
+            Console.Write("Data de devolução: ");
             DateTime devolucao = DateTime.ParseExact(Console.ReadLine(), "dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture);
 
             Console.Write("Preço por hora: R$");
@@ -24,7 +25,7 @@ namespace RentacarWiInterface
 
             CarRental cr = new CarRental(retirada, devolucao, new Vehicle(modelo));
 
-            RentalServices rs = new RentalServices(valorPorHora, valorPorDia);
+            RentalServices rs = new RentalServices(valorPorHora, valorPorDia, new BrasilTaxService());
 
             rs.ProcessInvoice(cr);
 
